@@ -1,0 +1,2 @@
+org.nunimbus.protocol.saml.mappers.UserEncryptedAttributeStatementMapper
+org.nunimbus.protocol.saml.mappers.UserPasswordEncryptedAttributeStatementMapper

@@ -1,0 +1,2 @@
+org.nunimbus.protocol.saml.mappers.FormParameterAuthenticatorFactory
+org.nunimbus.protocol.saml.mappers.CustomErrorAuthenticatorFactory
