@@ -79,7 +79,7 @@
     </dependency>
   </dependencies>
   <properties>
-    <build.outputDirectory>${project.basedir}/../../../git/sshfs-keycloak/standalone/deployments</build.outputDirectory>
+    <build.outputDirectory>${project.basedir}/target</build.outputDirectory>
     <attach.sources.phase>none</attach.sources.phase>
     <source.outputDirectory>${project.basedir}/target</source.outputDirectory>
   </properties>

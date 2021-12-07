@@ -19,8 +19,12 @@
     </description>
 
 	<properties>
-		<!-- build.outputDirectory>${project.basedir}/target</build.outputDirectory-->
+		<!---->
+		<build.outputDirectory>${project.basedir}/target</build.outputDirectory>
+
+		<!--
 		<build.outputDirectory>${project.basedir}/../../../git/sshfs-keycloak/standalone/deployments</build.outputDirectory>
+		-->
 		<source.outputDirectory>${project.basedir}/target</source.outputDirectory>
 		<attach.sources.phase>none</attach.sources.phase>
 	</properties>
