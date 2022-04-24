@@ -14,16 +14,10 @@ import org.keycloak.protocol.saml.mappers.AbstractSAMLProtocolMapper;
 import org.keycloak.protocol.saml.mappers.AttributeStatementHelper;
 import org.keycloak.protocol.saml.mappers.SAMLAttributeStatementMapper;
 import org.keycloak.provider.ProviderConfigProperty;
-import org.keycloak.services.util.CookieHelper;
 
 import util.CryptoUtils;
 import util.StreamsForEach;
-
-import org.keycloak.common.util.ServerCookie;
 import org.jboss.resteasy.spi.HttpRequest;
-import org.jboss.resteasy.spi.HttpResponse;
-import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.HttpHeaders;
 
 import java.util.Collection;
 import java.util.ArrayList;
@@ -31,9 +25,20 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * Mappings UserModel attribute (not property name of a getter method) to an AttributeStatement.
- *
- * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
+ * Maps a password-encrypted custom user attribute to a to a SAML client attribute
+ * 
+ * To enable:
+ * - Create a SAML client (varies by requirement)
+ * - Under the client settings, select the "Mappers" tab
+ * - Click "Create"
+ * - Provide a name for the mapper (user preference)
+ * - Select "Password Encrypted User Attribute" from the Mapper Type dropdown
+ * - Provide the name of the User Attribute to be decrypted and mapped
+ * - Provide the SAML Attribute Name for the attribute to be mapped
+ * - Select "Basic" from the SAML Attribute NameFormat dropdown
+ * - Click "Save"
+ * 
+ * @author Andrew Summers
  * @version $Revision: 1 $
  */
 public class UserPasswordEncryptedAttributeStatementMapper extends AbstractSAMLProtocolMapper implements SAMLAttributeStatementMapper {
@@ -95,7 +100,7 @@ public class UserPasswordEncryptedAttributeStatementMapper extends AbstractSAMLP
 
     	// Deprecated. Recommended to use PasswordCredentialModel.getSecretData().getValue() or OTPCredentialModel.getSecretData().getValue()
         String currentCredential = session.userCredentialManager().getStoredCredentialsStream(realm, user).sorted(CredentialModel.comparingByStartDateDesc()).findFirst().get().getValue();
-
+   
     	// On login, the cookie may not be set. Check for the existence of the password in the HTTP form data
         if (session.getContext().getAuthenticationSession().getAuthNote("password") != null) {
             String encrypted = attributeValues.toArray()[0].toString();
@@ -106,6 +111,7 @@ public class UserPasswordEncryptedAttributeStatementMapper extends AbstractSAMLP
 				String encryptedNew = CryptoUtils.encrypt(key, password);
 				user.setSingleAttribute(attributeName, encryptedNew);					
 
+/*
 				System.err.println("Mapping pw-encrypted attribute");
 		    	System.err.println(new Throwable().getStackTrace()[0].getFileName() + ":" + new Throwable().getStackTrace()[0].getLineNumber());
 				System.err.println("Encrypted: " + encrypted.substring(0, 8));
@@ -113,9 +119,7 @@ public class UserPasswordEncryptedAttributeStatementMapper extends AbstractSAMLP
 				System.err.println("Key:       " + key.substring(0, 8));
 				System.err.println();
 				System.err.println();
-				
-//				String encryptedCookie = CryptoUtils.encrypt(key, currentCredential);
-//		    	CookieHelper.addCookie(attributeName, encryptedCookie, "/auth/realms/nunimbus"/* + event.getRealmId()*/, null, null, -1, true, true);
+/**/
 
 				attributeValues.clear();
 				attributeValues.add(key);
@@ -125,8 +129,10 @@ public class UserPasswordEncryptedAttributeStatementMapper extends AbstractSAMLP
 			}
         }
         else {
-    		String cookie = request.getHttpHeaders().getCookies().get(attributeName).getValue();
-    		//String cookie = CookieHelper.getCookieValue(attributeName).toArray()[0];
+        	// I don't think this ever gets used
+        	int i = 1;
+/**/
+        	String cookie = request.getHttpHeaders().getCookies().get(attributeName).getValue();
 
 	        Stream<CredentialModel> credentials = session.userCredentialManager().getStoredCredentialsStream(realm, user).sorted(CredentialModel.comparingByStartDateDesc());
 	
@@ -138,7 +144,10 @@ public class UserPasswordEncryptedAttributeStatementMapper extends AbstractSAMLP
 	
 					String encryptedNew = CryptoUtils.encrypt(key, credential);
 					user.setSingleAttribute(attributeName, encryptedNew);					
-
+					attributeValues.clear();
+					attributeValues.add(key);
+					
+/*
 					System.err.println("Mapping pw-encrypted attribute");
 			    	System.err.println(new Throwable().getStackTrace()[0].getFileName() + ":" + new Throwable().getStackTrace()[0].getLineNumber());
 					System.err.println("Encrypted:   " + cookie.substring(0, 8));
@@ -146,20 +155,15 @@ public class UserPasswordEncryptedAttributeStatementMapper extends AbstractSAMLP
 					System.err.println("Key:         " + key.substring(0, 8));
 					System.err.println();
 					System.err.println();
-	
-//					if (! currentCredential.equals(credential)) {
-//						String encryptedCookie = CryptoUtils.encrypt(key, currentCredential);
-//				    	CookieHelper.addCookie(attributeName, encryptedCookie, "/auth/realms/nunimbus"/* + event.getRealmId()*/, null, null, -1, true, true);
-//					}
-					
-					attributeValues.clear();
-					attributeValues.add(key);
+/**/
+
 					breaker.stop();
 				} catch (Exception e) {
 					System.err.println("ERROR: Couldn't decrypt password-encrypted attribute " + new Throwable().getStackTrace()[0].getFileName());
 					//e.printStackTrace();
 				}
 			});
+/**/
         }
 
         AttributeStatementHelper.addAttributes(attributeStatement, mappingModel, attributeValues);

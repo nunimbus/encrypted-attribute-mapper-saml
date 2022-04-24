@@ -1,5 +1,10 @@
 package util;
 
+/**
+ *
+ * @author Andrew Summers
+ * @version $Revision: 1 $
+ */
 import org.passay.CharacterData;
 import org.passay.EnglishCharacterData;
 

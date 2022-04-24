@@ -7,6 +7,20 @@ import org.keycloak.policy.PasswordPolicyProvider;
 import org.keycloak.policy.PolicyError;
 import org.jboss.resteasy.spi.HttpRequest;
 
+/**
+ * Prevents admins from changing a user's password when the user has password-
+ * encrypted attributes.
+ * 
+ * Additionally, passes the password to event listeners such as the 
+ * SimpleEventListenerProvider during password changes.
+ * 
+ * To enable:
+ * - Authentication > Password Policy tab
+ * - Add the policy "Password Changed Hook"
+ *
+ * @author Andrew Summers
+ * @version $Revision: 1 $
+ */
 public class ChangePasswordPolicyProvider implements PasswordPolicyProvider {
 
     private static final String ERROR_MESSAGE = "Error: User has password-encrypted attributes. Cannot reset password.";
@@ -27,7 +41,7 @@ public class ChangePasswordPolicyProvider implements PasswordPolicyProvider {
 
     	HttpRequest request = context.getContextObject(HttpRequest.class);
     	
-    	if (request.getUri().getPathSegments().get(0).getPath().equals("admin")) {
+    	if (username.equals("admin")) {
     		context.getRealm().getClientsStream().forEach(client-> {
     			client.getProtocolMappersStream().forEach(mapper->{
     				if (mapper.getProtocolMapper().equals("saml-password-encrypted-user-attribute-mapper")) {
@@ -69,7 +83,7 @@ public class ChangePasswordPolicyProvider implements PasswordPolicyProvider {
 				});
 			});
 */		
-			// Required to be here to pass the password to the SAML mappers during registration
+			// Required to be here to pass the password to event listeners
 			context.getAuthenticationSession().setAuthNote("password", password);
     	}
     	

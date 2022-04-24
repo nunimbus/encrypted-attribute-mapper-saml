@@ -17,6 +17,23 @@
 
 package org.nunimbus.protocol.saml.mappers;
 
+/**
+ * Maps an encrypted custom user attribute to a to a SAML client attribute
+ * 
+ * To enable:
+ * - Create a SAML client (varies by requirement)
+ * - Under the client settings, select the "Mappers" tab
+ * - Click "Create"
+ * - Provide a name for the mapper (user preference)
+ * - Select "Encrypted User Attribute" from the Mapper Type dropdown
+ * - Provide the name of the User Attribute to be decrypted and mapped
+ * - Provide the SAML Attribute Name for the attribute to be mapped
+ * - Select "Basic" from the SAML Attribute NameFormat dropdown
+ * - Click "Save"
+ *
+ * @author Andrew Summers
+ * @version $Revision: 1 $
+ */
 import org.keycloak.credential.CredentialModel;
 import org.keycloak.dom.saml.v2.assertion.AttributeStatementType;
 import org.keycloak.models.AuthenticatedClientSessionModel;
@@ -31,22 +48,11 @@ import org.keycloak.protocol.saml.mappers.AbstractSAMLProtocolMapper;
 import org.keycloak.protocol.saml.mappers.AttributeStatementHelper;
 import org.keycloak.protocol.saml.mappers.SAMLAttributeStatementMapper;
 import org.keycloak.provider.ProviderConfigProperty;
-import org.keycloak.services.ErrorPage;
-import org.keycloak.services.messages.Messages;
-import org.keycloak.services.util.CookieHelper;
-import org.keycloak.services.managers.AuthenticationManager;
-
+//import org.keycloak.services.ErrorPage;
+//import org.keycloak.services.messages.Messages;
 
 import util.CryptoUtils;
 import util.StreamsForEach;
-
-import org.keycloak.common.util.ServerCookie;
-import org.jboss.resteasy.spi.HttpRequest;
-import org.jboss.resteasy.spi.HttpResponse;
-import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,6 +149,7 @@ public class UserEncryptedAttributeStatementMapper extends AbstractSAMLProtocolM
 					session.authenticationSessions().close();
 				}
 */
+/*
 				System.err.println("Mapping encrypted attribute");
 		    	System.err.println(new Throwable().getStackTrace()[0].getFileName() + ":" + new Throwable().getStackTrace()[0].getLineNumber());
 				System.err.println("Encrypted:   " + encrypted.substring(0, 8));
@@ -150,6 +157,7 @@ public class UserEncryptedAttributeStatementMapper extends AbstractSAMLProtocolM
 				System.err.println("Key:         " + key.substring(0, 8));
 				System.err.println();
 				System.err.println();
+/**/
 
 				if (! currentCredential.equals(credential)) {
 					String encryptedNew = CryptoUtils.encrypt(key, currentCredential);

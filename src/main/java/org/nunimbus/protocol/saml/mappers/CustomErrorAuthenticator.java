@@ -14,6 +14,14 @@ import org.keycloak.sessions.AuthenticationSessionModel;
 
 import util.CryptoUtils;
 
+/**
+* Passes the password to the SAML mappers during login; for example:
+* - UserEncryptedAttributeStatementMapper
+* - UserPasswordEncryptedAttributeStatementMapper
+* 
+* @author Andrew Summers
+* @version $Revision: 1 $
+*/
 public class CustomErrorAuthenticator implements Authenticator {
 
     @Override

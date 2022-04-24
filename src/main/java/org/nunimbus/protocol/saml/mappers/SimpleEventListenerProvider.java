@@ -1,5 +1,16 @@
 package org.nunimbus.protocol.saml.mappers;
 
+/**
+ * When the user changes their password, the encrypted and password-encrypted
+ * user attributes need to be updated accordingly.
+ * 
+ * To enable:
+ * - Events > Config (tab)
+ * - Add "pw-change-update-encrypted-user-attributes"
+ *
+ * @author Andrew Summers
+ * @version $Revision: 1 $
+ */
 import java.util.stream.Stream;
 import org.keycloak.credential.CredentialModel;
 import org.keycloak.events.Event;
@@ -9,8 +20,6 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.jboss.resteasy.spi.HttpRequest;
-import org.keycloak.services.util.CookieHelper;
-import org.keycloak.storage.user.*;
 
 import util.CryptoUtils;
 import util.StreamsForEach;
@@ -101,19 +110,17 @@ public class SimpleEventListenerProvider implements EventListenerProvider {
 
 										user.setSingleAttribute(V + "-old-1", user.getAttributeStream(V).findFirst().get());
 										user.setSingleAttribute(V, CryptoUtils.encrypt(decrypted, password_new));
-										
+
+/*
 								    	System.err.println("PW CHANGE: Password-encrypted values:");
 								    	System.err.println(new Throwable().getStackTrace()[0].getFileName() + ":" + new Throwable().getStackTrace()[0].getLineNumber());
-//										System.err.println("Encrypted:    " + encryptedCookie.substring(0, 8));
 										System.err.println("Credential:   " + currentCredential.substring(0, 8));
 										System.err.println("Password:     " + password);
 										System.err.println("New Password: " + password_new);
 										System.err.println("Key:          " + decrypted.substring(0, 8));
 										System.err.println();
 										System.err.println();
-
-//										String encryptedCookie = CryptoUtils.encrypt(decrypted, currentCredential);
-//								    	CookieHelper.addCookie("testCookie", encryptedCookie, "/auth/realms/" + event.getRealmId(), null, null, -1, true, true);
+/**/
 									} catch (Exception e) {
 										System.err.println("ERROR: " + new Throwable().getStackTrace()[0].getFileName() + ":" + new Throwable().getStackTrace()[0].getLineNumber());
 										//e.printStackTrace();
@@ -143,7 +150,7 @@ public class SimpleEventListenerProvider implements EventListenerProvider {
 	    										user.setSingleAttribute(V + "-old-1", user.getAttributeStream(V).findFirst().get());
 	    										user.setSingleAttribute(V, CryptoUtils.encrypt(decrypted, password_new));
 	    										
-
+/*
 	    										System.err.println("PW CHANGE: Encrypted values:");
 	    								    	System.err.println(new Throwable().getStackTrace()[0].getFileName() + ":" + new Throwable().getStackTrace()[0].getLineNumber());
 	    										System.err.println("Credential:   " + currentCredential.substring(0, 8));
@@ -152,6 +159,8 @@ public class SimpleEventListenerProvider implements EventListenerProvider {
 	    										System.err.println("Key:          " + decrypted.substring(0, 8));
 	    										System.err.println();
 	    										System.err.println();
+/**/
+
 	    										breaker.stop();
 	    									} catch (Exception e) {
 	    										System.err.println("ERROR: " + new Throwable().getStackTrace()[0].getFileName() + ":" + new Throwable().getStackTrace()[0].getLineNumber());

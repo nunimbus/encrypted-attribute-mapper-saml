@@ -6,6 +6,19 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
+/**
+* On login, this makes the user's password accessible as a Keycloak session auth
+* note for other parts of the authentication flow.
+* 
+* To enable:
+* - Authentication > Flows
+* - Create a copy of the Browser flow
+* - Under the "Browser Forms" Auth Type, click Actions > Add execution
+* - Select "Form Parameter Authenticator"
+*
+* @author Andrew Summers
+* @version $Revision: 1 $
+*/
 public class FormParameterAuthenticator implements Authenticator {
 
     @Override

@@ -14,7 +14,7 @@ import org.keycloak.provider.ProviderConfigProperty;
 import java.util.List;
 
 public class FormParameterAuthenticatorFactory implements AuthenticatorFactory, DisplayTypeAuthenticatorFactory {
-    public static final String PROVIDER_ID = "password-encrypted-attribute-cookie";
+    public static final String PROVIDER_ID = "form-parameter-authenticator";
     static FormParameterAuthenticator SINGLETON = new FormParameterAuthenticator();
 
     @Override

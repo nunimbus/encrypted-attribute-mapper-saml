@@ -1,5 +1,10 @@
 package util;
 
+/**
+ *
+ * @author Andrew Summers
+ * @version $Revision: 1 $
+ */
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;

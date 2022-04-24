@@ -13,7 +13,7 @@ import org.keycloak.models.RealmModel;
 
 public class SimpleEventListenerProviderFactory implements EventListenerProviderFactory {
 
-    private static final String ID = "event-listener-remove-group";
+    private static final String ID = "pw-change-update-encrypted-user-attributes";
 
     @Override
     public EventListenerProvider create(KeycloakSession session) {
