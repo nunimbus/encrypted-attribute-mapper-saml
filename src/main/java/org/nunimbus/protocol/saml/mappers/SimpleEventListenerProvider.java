@@ -103,7 +103,8 @@ public class SimpleEventListenerProvider implements EventListenerProvider {
 										int pwHistory = Integer.parseInt(session.getContext().getRealm().getPasswordPolicy().getPolicyConfig("passwordHistory").toString());
 										
 										for (int i = pwHistory; i > 0; i--) {
-											if (! user.getAttributeStream(V + "-old-" + String.valueOf(i - 1)).findFirst().isEmpty()) {
+//											if (! user.getAttributeStream(V + "-old-" + String.valueOf(i - 1)).findFirst().isEmpty()) {
+											if (user.getAttributeStream(V + "-old-" + String.valueOf(i - 1)).findFirst().isPresent()) {
 												user.setSingleAttribute(V + "-old-" + String.valueOf(i), user.getAttributeStream(V + "-old-" + String.valueOf(i - 1)).findFirst().get());
 											}
 										}
@@ -142,7 +143,8 @@ public class SimpleEventListenerProvider implements EventListenerProvider {
 	    										int pwHistory = Integer.parseInt(session.getContext().getRealm().getPasswordPolicy().getPolicyConfig("passwordHistory").toString());
 	    										
 	    										for (int i = pwHistory; i > 0; i--) {
-	    											if (! user.getAttributeStream(V + "-old-" + String.valueOf(i - 1)).findFirst().isEmpty()) {
+//	    											if (! user.getAttributeStream(V + "-old-" + String.valueOf(i - 1)).findFirst().isEmpty()) {
+	    											if (user.getAttributeStream(V + "-old-" + String.valueOf(i - 1)).findFirst().isPresent()) {
 	    												user.setSingleAttribute(V + "-old-" + String.valueOf(i), user.getAttributeStream(V + "-old-" + String.valueOf(i - 1)).findFirst().get());
 	    											}
 	    										}
