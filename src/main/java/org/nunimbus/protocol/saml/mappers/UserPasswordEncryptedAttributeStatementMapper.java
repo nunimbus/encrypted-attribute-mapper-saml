@@ -99,7 +99,7 @@ public class UserPasswordEncryptedAttributeStatementMapper extends AbstractSAMLP
     	HttpRequest request = session.getContext().getContextObject(HttpRequest.class);
 
     	// Deprecated. Recommended to use PasswordCredentialModel.getSecretData().getValue() or OTPCredentialModel.getSecretData().getValue()
-        String currentCredential = session.userCredentialManager().getStoredCredentialsStream(realm, user).sorted(CredentialModel.comparingByStartDateDesc()).findFirst().get().getValue();
+        String currentCredential = user.credentialManager().getStoredCredentialsStream().sorted(CredentialModel.comparingByStartDateDesc()).findFirst().get().getValue();
    
     	// On login, the cookie may not be set. Check for the existence of the password in the HTTP form data
         if (session.getContext().getAuthenticationSession().getAuthNote("password") != null) {
@@ -134,7 +134,7 @@ public class UserPasswordEncryptedAttributeStatementMapper extends AbstractSAMLP
 /**/
         	String cookie = request.getHttpHeaders().getCookies().get(attributeName).getValue();
 
-	        Stream<CredentialModel> credentials = session.userCredentialManager().getStoredCredentialsStream(realm, user).sorted(CredentialModel.comparingByStartDateDesc());
+	        Stream<CredentialModel> credentials = user.credentialManager().getStoredCredentialsStream().sorted(CredentialModel.comparingByStartDateDesc());
 	
 	        // Loop through all credentials in the user's history and try to decrypt the secret. Then, re-encrypt the secret with the current credential.
 	        StreamsForEach.forEach(credentials, (c, breaker) -> {

@@ -119,8 +119,8 @@ public class UserEncryptedAttributeStatementMapper extends AbstractSAMLProtocolM
         String encrypted = attributeValues.toArray()[0].toString();
         
         // Deprecated. Recommended to use PasswordCredentialModel.getSecretData().getValue() or OTPCredentialModel.getSecretData().getValue()
-        String currentCredential = session.userCredentialManager().getStoredCredentialsStream(realm, user).sorted(CredentialModel.comparingByStartDateDesc()).findFirst().get().getValue();
-        Stream<CredentialModel> credentials = session.userCredentialManager().getStoredCredentialsStream(realm, user).sorted(CredentialModel.comparingByStartDateDesc());
+        String currentCredential = user.credentialManager().getStoredCredentialsStream().sorted(CredentialModel.comparingByStartDateDesc()).findFirst().get().getValue();
+        Stream<CredentialModel> credentials = user.credentialManager().getStoredCredentialsStream().sorted(CredentialModel.comparingByStartDateDesc());
         
         // Loop through all credentials in the user's history and try to decrypt the secret. Then, re-encrypt the secret with the current credential.
         StreamsForEach.forEach(credentials, (c, breaker) -> {

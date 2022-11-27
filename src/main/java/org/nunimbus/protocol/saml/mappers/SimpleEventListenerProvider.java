@@ -46,7 +46,7 @@ public class SimpleEventListenerProvider implements EventListenerProvider {
     		String username = session.getContext().getContextObject(HttpRequest.class).getDecodedFormParameters().get("username").get(0);
     		String password = session.getContext().getContextObject(HttpRequest.class).getDecodedFormParameters().get("password").get(0);
     		UserModel user = session.users().getUserByUsername(realm, username);
-    		String currentCredential = session.userCredentialManager().getStoredCredentialsStream(realm, user).sorted(CredentialModel.comparingByStartDateDesc()).findFirst().get().getValue();
+    		String currentCredential = user.credentialManager().getStoredCredentialsStream().sorted(CredentialModel.comparingByStartDateDesc()).findFirst().get().getValue();
 
     		// Loop through each client's mappers, find the encrypted user attribute mappers, and update the values according to the new password credential.
     		realm.getClientsStream().forEach(client-> {
@@ -87,8 +87,8 @@ public class SimpleEventListenerProvider implements EventListenerProvider {
     		UserModel user = session.users().getUserByUsername(realm, username);
     		String password = session.getContext().getContextObject(HttpRequest.class).getDecodedFormParameters().get("password").get(0);
     		String password_new = session.getContext().getContextObject(HttpRequest.class).getDecodedFormParameters().get("password-new").get(0);
-    		Stream<CredentialModel> credentials = session.userCredentialManager().getStoredCredentialsStream(realm, user).sorted(CredentialModel.comparingByStartDateDesc());;
-    		String currentCredential = session.userCredentialManager().getStoredCredentialsStream(realm, user).sorted(CredentialModel.comparingByStartDateDesc()).findFirst().get().getValue();
+    		Stream<CredentialModel> credentials = user.credentialManager().getStoredCredentialsStream().sorted(CredentialModel.comparingByStartDateDesc());;
+    		String currentCredential = user.credentialManager().getStoredCredentialsStream().sorted(CredentialModel.comparingByStartDateDesc()).findFirst().get().getValue();
 
     		// Loop through each client's mappers, find the encrypted user attribute mappers, and update the values according to the new password credential.
     		this.session.getContext().getRealm().getClientsStream().forEach(client-> {
@@ -189,8 +189,8 @@ public class SimpleEventListenerProvider implements EventListenerProvider {
 	    	// This fails. For some reason, getUserById won't work.
 /*	    	if (resource.length == 3 && resource[0].equals("users") && resource[2].equals("reset-password")) {
 	    		UserModel user = session.users().getUserById(realm, resource[1]);
-	    		Stream<CredentialModel> credentials = session.userCredentialManager().getStoredCredentialsStream(realm, user).sorted(CredentialModel.comparingByStartDateDesc());;
-	    		String currentCredential = session.userCredentialManager().getStoredCredentialsStream(realm, user).sorted(CredentialModel.comparingByStartDateDesc()).findFirst().get().getValue();
+	    		Stream<CredentialModel> credentials = user.credentialManager().getStoredCredentialsStream().sorted(CredentialModel.comparingByStartDateDesc());;
+	    		String currentCredential = user.credentialManager().getStoredCredentialsStream().sorted(CredentialModel.comparingByStartDateDesc()).findFirst().get().getValue();
 
 	    		// Loop through each client's mappers, find the encrypted user attribute mappers, and update the values according to the new password credential.
 	    		realm.getClientsStream().forEach(client-> {
